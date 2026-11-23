@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CapturePro — Record. Capture. Create. (Phase 1 Prototype)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <div class="proto-wrapper">
+    <!-- Desktop Prototype Preview Bar -->
+    <div class="proto-bar">
+      <div class="proto-bar-left">
+        <span class="proto-badge">
+          <i data-lucide="flask-conical" style="width:12px;height:12px;"></i>
+          PHASE 1 PROTOTYPE SIMULATION
+        </span>
+        <span>Interactive UI simulation (native Android MediaProjection engine in Phase 2)</span>
+      </div>
+      <div class="proto-controls">
+        <button class="proto-btn" id="vp360Btn" type="button">360px Mobile</button>
+        <button class="proto-btn active" id="vp412Btn" type="button">412px Mobile</button>
+        <button class="proto-btn" id="vpFullBtn" type="button">Expanded</button>
+        <button class="proto-btn" id="openErrorSimBtn" type="button">
+          <i data-lucide="alert-triangle" style="width:12px;height:12px;"></i>
+          Test Error States
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Device Stage -->
+    <div class="device-stage">
+      <div class="device-shell size-412" id="deviceShell">
+        <!-- Android Status Bar -->
+        <div class="status-bar">
+          <span id="statusClock">16:03</span>
+          <div class="status-bar-icons">
+            <span style="font-size:10px;opacity:0.75;">PROTOTYPE</span>
+            <i data-lucide="wifi" style="width:12px;height:12px;"></i>
+            <i data-lucide="battery-charging" style="width:13px;height:13px;"></i>
+          </div>
+        </div>
+
+        <!-- App Header -->
+        <header class="app-header">
+          <div class="brand">
+            <div class="brand-logo" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="4" />
+                <circle cx="12" cy="12" r="3.5" fill="currentColor" />
+              </svg>
+            </div>
+            <div class="brand-text">
+              <h1>CapturePro</h1>
+              <span>Record. Capture. Create.</span>
+            </div>
+          </div>
+          <div class="header-actions">
+            <button class="icon-btn" id="themeToggleBtn" type="button" title="Toggle Dark/Light Theme" aria-label="Toggle theme">
+              <i data-lucide="sun" id="themeIcon" style="width:18px;height:18px;"></i>
+            </button>
+            <button class="icon-btn" id="headerSettingsBtn" type="button" title="Settings" aria-label="Open settings">
+              <i data-lucide="settings" style="width:18px;height:18px;"></i>
+            </button>
+          </div>
+        </header>
+
+        <!-- Main Scrollable Content -->
+        <main class="app-main" id="appMain">
+          <!-- 1. DASHBOARD SCREEN -->
+          <section class="screen active" id="screen-dashboard">
+            <div class="record-hero-card">
+              <div class="sim-pill" id="recStatusPill">
+                <span class="status-dot"></span>
+                <span id="recStatusText">IDLE • Prototype Simulation</span>
+              </div>
+
+              <div class="record-btn-ring" id="recBtnRing">
+                <button class="record-main-btn" id="mainRecordBtn" type="button" aria-label="Start Recording">
+                  <i data-lucide="circle-dot" id="mainRecordIcon" style="width:28px;height:28px;"></i>
+                  <span id="mainRecordBtnLabel">REC</span>
+                </button>
+              </div>
+
+              <div class="record-timer" id="recTimer">00:00:00</div>
+              <div class="record-cta-label" id="recCtaLabel">Start Recording</div>
+
+              <div class="active-rec-controls" id="activeRecControls" style="display:none;">
+                <button class="ctrl-pill-btn" id="pauseResumeBtn" type="button">
+                  <i data-lucide="pause" style="width:15px;height:15px;"></i>
+                  <span id="pauseResumeText">Pause</span>
+                </button>
+                <button class="ctrl-pill-btn danger" id="stopRecBtn" type="button">
+                  <i data-lucide="square" style="width:14px;height:14px;"></i>
+                  <span>Stop</span>
+                </button>
+              </div>
+
+              <div class="hero-meta-row">
+                <button class="meta-chip" data-nav="screen-quality" type="button">
+                  <i data-lucide="film" style="width:12px;height:12px;"></i>
+                  <span id="heroQualityChip">1440p QHD • 60 FPS</span>
+                </button>
+                <button class="meta-chip" data-nav="screen-quality" type="button">
+                  <i data-lucide="smartphone" style="width:12px;height:12px;"></i>
+                  <span id="heroOrientChip">Portrait</span>
+                </button>
+                <button class="meta-chip" data-nav="screen-audio" type="button">
+                  <i data-lucide="mic" style="width:12px;height:12px;"></i>
+                  <span id="heroAudioChip">Internal + Mic</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions-grid">
+              <button class="quick-action-btn" id="qaRecordBtn" type="button">
+                <div class="qa-icon"><i data-lucide="video" style="width:18px;height:18px;"></i></div>
+                <span>Record</span>
+              </button>
+              <button class="quick-action-btn" id="qaScreenshotBtn" type="button">
+                <div class="qa-icon blue"><i data-lucide="camera" style="width:18px;height:18px;"></i></div>
+                <span>Screenshot</span>
+              </button>
+              <button class="quick-action-btn" data-nav="screen-library" type="button">
+                <div class="qa-icon green"><i data-lucide="folder-open" style="width:18px;height:18px;"></i></div>
+                <span>Recordings</span>
+              </button>
+              <button class="quick-action-btn" data-nav="screen-settings" type="button">
+                <div class="qa-icon amber"><i data-lucide="sliders-horizontal" style="width:18px;height:18px;"></i></div>
+                <span>Settings</span>
+              </button>
+            </div>
+
+            <!-- Configuration Summary -->
+            <div class="section-header">
+              <h2>Recording Configuration</h2>
+              <button class="link-btn" data-nav="screen-quality" type="button">Configure</button>
+            </div>
+            <div class="config-grid">
+              <button class="config-tile" data-nav="screen-quality" type="button">
+                <div class="config-tile-icon"><i data-lucide="monitor" style="width:16px;height:16px;"></i></div>
+                <div class="config-tile-body">
+                  <span class="config-tile-label">Resolution</span>
+                  <span class="config-tile-value" id="cfgResVal">1440p QHD</span>
+                </div>
+              </button>
+              <button class="config-tile" data-nav="screen-quality" type="button">
+                <div class="config-tile-icon"><i data-lucide="gauge" style="width:16px;height:16px;"></i></div>
+                <div class="config-tile-body">
+                  <span class="config-tile-label">Frame Rate</span>
+                  <span class="config-tile-value" id="cfgFpsVal">60 FPS</span>
+                </div>
+              </button>
+              <button class="config-tile" data-nav="screen-audio" type="button">
+                <div class="config-tile-icon"><i data-lucide="volume-2" style="width:16px;height:16px;"></i></div>
+                <div class="config-tile-body">
+                  <span class="config-tile-label">Audio Mode</span>
+                  <span class="config-tile-value" id="cfgAudioVal">Internal + Mic</span>
+                </div>
+              </button>
+              <button class="config-tile" data-nav="screen-audio" type="button">
+                <div class="config-tile-icon"><i data-lucide="mic" style="width:16px;height:16px;"></i></div>
+                <div class="config-tile-body">
+                  <span class="config-tile-label">Microphone</span>
+                  <span class="config-tile-value" id="cfgMicVal">Enabled (Ready)</span>
+                </div>
+              </button>
+              <button class="config-tile" data-nav="screen-facecam" type="button">
+                <div class="config-tile-icon"><i data-lucide="user-round" style="width:16px;height:16px;"></i></div>
+                <div class="config-tile-body">
+                  <span class="config-tile-label">Facecam</span>
+                  <span class="config-tile-value" id="cfgFacecamVal">Off</span>
+                </div>
+              </button>
+              <button class="config-tile" data-nav="screen-storage" type="button">
+                <div class="config-tile-icon"><i data-lucide="hard-drive" style="width:16px;height:16px;"></i></div>
+                <div class="config-tile-body">
+                  <span class="config-tile-label">Available Storage</span>
+                  <span class="config-tile-value" id="cfgStorageVal">48.6 GB Free</span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Storage Indicator -->
+            <div class="section-header">
+              <h2>Device Storage (Sample)</h2>
+              <button class="link-btn" data-nav="screen-storage" type="button">Manage</button>
+            </div>
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                <strong style="font-size:13px;" id="dashStorageSummary">79.4 GB used of 128 GB</strong>
+                <span style="font-size:12px;color:var(--green);font-weight:600;" id="dashStorageFree">48.6 GB free</span>
+              </div>
+              <div class="storage-bar-track">
+                <div class="storage-seg-system" id="dashSegSys" style="width:58%;"></div>
+                <div class="storage-seg-videos" id="dashSegVid" style="width:3.5%;"></div>
+                <div class="storage-seg-shots" id="dashSegShot" style="width:0.5%;"></div>
+              </div>
+              <div class="storage-legend">
+                <span class="legend-item"><span class="legend-dot" style="background:#64748b;"></span>System &amp; Apps</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--accent);"></span>Videos</span>
+                <span class="legend-item"><span class="legend-dot" style="background:var(--blue);"></span>Screenshots</span>
+              </div>
+            </div>
+
+            <!-- Recent Recordings -->
+            <div class="section-header">
+              <h2>Recent Recordings</h2>
+              <button class="link-btn" data-nav="screen-library" type="button">See All</button>
+            </div>
+            <div class="media-list" id="recentRecordingsList"></div>
+          </section>
+
+          <!-- 2. LIBRARY SCREEN -->
+          <section class="screen" id="screen-library">
+            <div class="subpage-header">
+              <h2>Media Library</h2>
+            </div>
+
+            <div class="tabs-row">
+              <button class="tab-btn active" data-lib-tab="all" type="button">All</button>
+              <button class="tab-btn" data-lib-tab="video" type="button">Videos</button>
+              <button class="tab-btn" data-lib-tab="screenshot" type="button">Screenshots</button>
+            </div>
+
+            <div class="search-sort-row">
+              <div class="search-box">
+                <i data-lucide="search" style="width:15px;height:15px;color:var(--text-muted);"></i>
+                <input type="text" id="libSearchInput" placeholder="Search recordings or screenshots..." />
+              </div>
+              <select class="sort-select" id="libSortSelect" aria-label="Sort recordings">
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="size">File Size</option>
+              </select>
+            </div>
+
+            <div class="media-list" id="libraryList"></div>
+          </section>
+
+          <!-- 3. STORAGE MANAGEMENT SCREEN -->
+          <section class="screen" id="screen-storage">
+            <div class="subpage-header">
+              <h2>Storage Management</h2>
+            </div>
+
+            <div class="banner info">
+              <i data-lucide="info" style="width:16px;height:16px;flex-shrink:0;margin-top:1px;"></i>
+              <span>Prototype uses sample storage metrics. Native Android uses <strong>MediaStore</strong> for shared storage and <strong>Storage Access Framework (SAF)</strong> for custom folders—no unrestricted all-files permission needed.</span>
+            </div>
+
+            <div class="card" style="margin-bottom:14px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                <span style="font-size:12px;color:var(--text-muted);">Total Device Storage</span>
+                <strong style="font-size:13px;">128.0 GB</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                <span style="font-size:12px;color:var(--text-muted);">Available Storage</span>
+                <strong style="font-size:13px;color:var(--green);" id="storAvailVal">48.6 GB</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                <span style="font-size:12px;color:var(--text-muted);">CapturePro Videos</span>
+                <strong style="font-size:13px;color:var(--accent);" id="storVideosVal">0 MB</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;">
+                <span style="font-size:12px;color:var(--text-muted);">CapturePro Screenshots</span>
+                <strong style="font-size:13px;color:var(--blue);" id="storShotsVal">0 MB</strong>
+              </div>
+              <div class="storage-bar-track">
+                <div class="storage-seg-system" style="width:58%;"></div>
+                <div class="storage-seg-videos" id="storSegVid" style="width:3.5%;"></div>
+                <div class="storage-seg-shots" id="storSegShot" style="width:0.5%;"></div>
+              </div>
+            </div>
+
+            <div class="settings-group">
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="folder" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Save Destination</span>
+                    <span class="settings-sub" id="saveDestSub">MediaStore • Movies/CapturePro</span>
+                  </div>
+                </div>
+                <select class="sort-select" id="saveDestSelect" aria-label="Save destination">
+                  <option value="mediastore">MediaStore (Movies)</option>
+                  <option value="saf">SAF Custom Folder</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="file-text" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">File Naming Pattern</span>
+                    <span class="settings-sub" id="namingPatternSub">CapturePro_YYYYMMDD_HHMMSS</span>
+                  </div>
+                </div>
+                <select class="sort-select" id="namingPatternSelect" aria-label="File naming pattern">
+                  <option value="CapturePro_YYYYMMDD_HHMMSS">Timestamp</option>
+                  <option value="ScreenRec_###">Sequential</option>
+                </select>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="alert-circle" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Low-Storage Warning</span>
+                    <span class="settings-sub">Warn before recording if &lt; 2 GB free</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="lowStorageWarnToggle" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="trash-2" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Delete Confirmation</span>
+                    <span class="settings-sub">Ask before deleting recordings</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="deleteConfirmToggle" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4. SETTINGS SCREEN -->
+          <section class="screen" id="screen-settings">
+            <div class="subpage-header">
+              <h2>Settings</h2>
+            </div>
+
+            <div class="settings-group">
+              <button class="settings-row clickable" data-nav="screen-quality" type="button">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="film" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Video Quality &amp; Orientation</span>
+                    <span class="settings-sub" id="setQualitySub">1440p QHD • 60 FPS • Portrait</span>
+                  </div>
+                </div>
+                <i data-lucide="chevron-right" style="width:16px;height:16px;color:var(--text-muted);"></i>
+              </button>
+              <button class="settings-row clickable" data-nav="screen-audio" type="button">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="mic" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Audio Settings</span>
+                    <span class="settings-sub" id="setAudioSub">Internal Audio + Microphone</span>
+                  </div>
+                </div>
+                <i data-lucide="chevron-right" style="width:16px;height:16px;color:var(--text-muted);"></i>
+              </button>
+              <button class="settings-row clickable" data-nav="screen-facecam" type="button">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="user-round" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Face Camera (Facecam)</span>
+                    <span class="settings-sub" id="setFacecamSub">Disabled</span>
+                  </div>
+                </div>
+                <i data-lucide="chevron-right" style="width:16px;height:16px;color:var(--text-muted);"></i>
+              </button>
+              <button class="settings-row clickable" data-nav="screen-storage" type="button">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="hard-drive" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Storage &amp; File Naming</span>
+                    <span class="settings-sub">MediaStore • Movies/CapturePro</span>
+                  </div>
+                </div>
+                <i data-lucide="chevron-right" style="width:16px;height:16px;color:var(--text-muted);"></i>
+              </button>
+            </div>
+
+            <div class="settings-group">
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="picture-in-picture-2" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Floating Recording Controls</span>
+                    <span class="settings-sub">Movable overlay pill during recording</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="floatingToggle" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="bell" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Recording Notifications</span>
+                    <span class="settings-sub">Persistent foreground notification controls</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="notifToggle" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="moon" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Dark Theme</span>
+                    <span class="settings-sub">Dark charcoal UI (Default)</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="settingsThemeToggle" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-group">
+              <button class="settings-row clickable" data-nav="screen-privacy" type="button">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="shield-check" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Privacy, Permissions &amp; About</span>
+                    <span class="settings-sub">Android 14+ MediaProjection consent &amp; policies</span>
+                  </div>
+                </div>
+                <i data-lucide="chevron-right" style="width:16px;height:16px;color:var(--text-muted);"></i>
+              </button>
+              <button class="settings-row clickable" id="settingsErrorTesterBtn" type="button">
+                <div class="settings-row-left">
+                  <div class="settings-icon" style="color:var(--amber);"><i data-lucide="alert-triangle" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Simulate Error States</span>
+                    <span class="settings-sub">Preview all 11 Android failure &amp; fallback dialogs</span>
+                  </div>
+                </div>
+                <i data-lucide="chevron-right" style="width:16px;height:16px;color:var(--text-muted);"></i>
+              </button>
+            </div>
+          </section>
+
+          <!-- 5. AUDIO SETTINGS SUB-SCREEN -->
+          <section class="screen" id="screen-audio">
+            <div class="subpage-header">
+              <button class="icon-btn" data-nav="screen-settings" type="button" aria-label="Back">
+                <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+              </button>
+              <h2>Audio Settings</h2>
+            </div>
+
+            <div class="banner warning" id="audioWarningBanner">
+              <i data-lucide="shield-alert" style="width:16px;height:16px;flex-shrink:0;margin-top:1px;"></i>
+              <span><strong>AudioPlaybackCapture Policy:</strong> Android restricts internal audio by app policy and usage. Voice-communication apps like <strong>Google Meet</strong> may block internal playback capture; use Microphone as an alternative when unavailable.</span>
+            </div>
+
+            <div class="settings-group">
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="volume-2" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Internal Audio</span>
+                    <span class="settings-sub" id="internalAudioStatus">Supported (Android 10+ AudioPlaybackCapture)</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="internalAudioToggle" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="ban" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Simulate App Capture Restriction</span>
+                    <span class="settings-sub">Test behavior when an app blocks internal audio</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="simInternalBlockedToggle" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-group">
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="mic" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Microphone Audio</span>
+                    <span class="settings-sub" id="micAudioStatus">RECORD_AUDIO: Granted (Simulated)</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="micAudioToggle" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="radio" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Microphone Source</span>
+                    <span class="settings-sub">Android AudioRecord input</span>
+                  </div>
+                </div>
+                <select class="sort-select" id="micSourceSelect" aria-label="Microphone source">
+                  <option value="Default Mic">Default Mic</option>
+                  <option value="Headset / BT">Headset / BT</option>
+                  <option value="Unprocessed">Unprocessed</option>
+                </select>
+              </div>
+              <div style="padding:0 14px 14px;">
+                <span style="font-size:11px;color:var(--text-muted);">Simulated Mic Input Level</span>
+                <div class="vu-meter" id="vuMeter">
+                  <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
+                  <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
+                  <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
+                  <div class="vu-bar"></div><div class="vu-bar"></div><div class="vu-bar"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <span style="font-size:11.5px;color:var(--text-muted);display:block;margin-bottom:4px;">Active Audio Configuration</span>
+              <strong style="font-size:14px;" id="activeAudioSummary">Internal Audio + Microphone</strong>
+              <p style="font-size:11.5px;color:var(--text-secondary);margin-top:4px;" id="activeAudioDetail">
+                Both sources enabled. Native Android will mix AudioPlaybackCapture and AudioRecord where supported by device hardware.
+              </p>
+            </div>
+          </section>
+
+          <!-- 6. VIDEO QUALITY & ORIENTATION SUB-SCREEN -->
+          <section class="screen" id="screen-quality">
+            <div class="subpage-header">
+              <button class="icon-btn" data-nav="screen-settings" type="button" aria-label="Back">
+                <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+              </button>
+              <h2>Video Quality &amp; Orientation</h2>
+            </div>
+
+            <div class="section-header" style="margin-top:4px;">
+              <h2>Resolution (1440p Preferred)</h2>
+            </div>
+            <div class="pill-grid" id="resGrid">
+              <button class="select-pill" data-res="480p" type="button">
+                <span class="select-pill-title">480p SD</span>
+                <span class="select-pill-sub">854 × 480 • ~28 MB/min</span>
+              </button>
+              <button class="select-pill" data-res="720p" type="button">
+                <span class="select-pill-title">720p HD</span>
+                <span class="select-pill-sub">1280 × 720 • ~52 MB/min</span>
+              </button>
+              <button class="select-pill" data-res="1080p" type="button">
+                <span class="select-pill-title">1080p Full HD</span>
+                <span class="select-pill-sub">1920 × 1080 • ~95 MB/min</span>
+              </button>
+              <button class="select-pill active" data-res="1440p" type="button">
+                <span class="select-pill-title">1440p QHD</span>
+                <span class="select-pill-sub">2560 × 1440 • ~145 MB/min</span>
+              </button>
+            </div>
+
+            <div class="section-header">
+              <h2>Frame Rate</h2>
+            </div>
+            <div class="pill-grid cols-3" id="fpsGrid">
+              <button class="select-pill" data-fps="24" type="button">
+                <span class="select-pill-title">24 FPS</span>
+                <span class="select-pill-sub">Cinematic</span>
+              </button>
+              <button class="select-pill" data-fps="30" type="button">
+                <span class="select-pill-title">30 FPS</span>
+                <span class="select-pill-sub">Balanced</span>
+              </button>
+              <button class="select-pill active" data-fps="60" type="button">
+                <span class="select-pill-title">60 FPS</span>
+                <span class="select-pill-sub">Fluid Motion</span>
+              </button>
+            </div>
+
+            <div class="section-header">
+              <h2>Screen Orientation</h2>
+            </div>
+            <div class="pill-grid cols-3" id="orientGrid">
+              <button class="select-pill active" data-orient="Portrait" type="button">
+                <span class="select-pill-title">Portrait</span>
+                <span class="select-pill-sub">9:16 Vertical</span>
+              </button>
+              <button class="select-pill" data-orient="Landscape" type="button">
+                <span class="select-pill-title">Landscape</span>
+                <span class="select-pill-sub">16:9 Wide</span>
+              </button>
+              <button class="select-pill" data-orient="Auto" type="button">
+                <span class="select-pill-title">Auto</span>
+                <span class="select-pill-sub">Sensor Metadata</span>
+              </button>
+            </div>
+
+            <div class="card" style="margin-bottom:12px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:12px;color:var(--text-muted);">Video Encoder</span>
+                <strong style="font-size:12.5px;">H.264 AVC (Hardware MediaCodec)</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                <span style="font-size:12px;color:var(--text-muted);">Estimated Usage</span>
+                <strong style="font-size:12.5px;" id="estUsageVal">~145 MB / min</strong>
+              </div>
+              <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.45;">
+                Native Android inspects display dimensions &amp; MediaCodec capabilities at runtime. If 1440p or 60 FPS is unsupported on a device, CapturePro selects the nearest supported profile.
+              </p>
+            </div>
+
+            <div class="settings-group">
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="cpu" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Simulate Mid-Range Device Cap</span>
+                    <span class="settings-sub">Test fallback when 1440p/60fps is unsupported</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="simCapFallbackToggle" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </section>
+
+          <!-- 7. FACECAM SUB-SCREEN -->
+          <section class="screen" id="screen-facecam">
+            <div class="subpage-header">
+              <button class="icon-btn" data-nav="screen-settings" type="button" aria-label="Back">
+                <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+              </button>
+              <h2>Face Camera (Facecam)</h2>
+            </div>
+
+            <div class="settings-group">
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="camera" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Enable Facecam Overlay</span>
+                    <span class="settings-sub" id="facecamPermSub">CAMERA permission: Ready (Simulated)</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="facecamToggle" />
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="settings-row">
+                <div class="settings-row-left">
+                  <div class="settings-icon"><i data-lucide="square" style="width:16px;height:16px;"></i></div>
+                  <div>
+                    <span class="settings-label">Accent Border</span>
+                    <span class="settings-sub">Show subtle frame outline</span>
+                  </div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="facecamBorderToggle" checked />
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="section-header">
+              <h2>Frame Shape</h2>
+            </div>
+            <div class="pill-grid" id="facecamShapeGrid">
+              <button class="select-pill active" data-shape="circle" type="button">
+                <span class="select-pill-title">Circle</span>
+                <span class="select-pill-sub">Compact avatar bubble</span>
+              </button>
+              <button class="select-pill" data-shape="rounded-rect" type="button">
+                <span class="select-pill-title">Rounded Rect</span>
+                <span class="select-pill-sub">Portrait camera frame</span>
+              </button>
+            </div>
+
+            <div class="section-header">
+              <h2>Quick Position (or Drag Window)</h2>
+            </div>
+            <div class="pill-grid" id="facecamPosGrid">
+              <button class="select-pill" data-pos="top-left" type="button"><span class="select-pill-title">Top Left</span></button>
+              <button class="select-pill" data-pos="top-right" type="button"><span class="select-pill-title">Top Right</span></button>
+              <button class="select-pill" data-pos="bottom-left" type="button"><span class="select-pill-title">Bottom Left</span></button>
+              <button class="select-pill active" data-pos="bottom-right" type="button"><span class="select-pill-title">Bottom Right</span></button>
+            </div>
+
+            <div class="banner info">
+              <i data-lucide="info" style="width:16px;height:16px;flex-shrink:0;margin-top:1px;"></i>
+              <span>Native Android uses <strong>CameraX</strong>. Some devices or apps (such as active video calls) restrict simultaneous camera access; CapturePro disables facecam gracefully if the camera is busy.</span>
+            </div>
+          </section>
+
+          <!-- 8. PRIVACY & ABOUT SUB-SCREEN -->
+          <section class="screen" id="screen-privacy">
+            <div class="subpage-header">
+              <button class="icon-btn" data-nav="screen-settings" type="button" aria-label="Back">
+                <i data-lucide="arrow-left" style="width:18px;height:18px;"></i>
+              </button>
+              <h2>Privacy, Permissions &amp; About</h2>
+            </div>
+
+            <div class="card" style="margin-bottom:12px;">
+              <h3 style="font-size:14px;margin-bottom:6px;">Android Permissions Policy</h3>
+              <p style="font-size:12px;color:var(--text-secondary);line-height:1.5;">
+                CapturePro requests permissions only when needed:
+                <br>• <strong>MediaProjection Consent:</strong> Fresh system dialog per capture session (Android 14+ supports Single App or Entire Display).
+                <br>• <strong>RECORD_AUDIO:</strong> Only when Microphone recording is enabled.
+                <br>• <strong>CAMERA:</strong> Only when Facecam is enabled.
+                <br>• <strong>SYSTEM_ALERT_WINDOW:</strong> Optional for movable floating controls.
+                <br>• <strong>Foreground Service:</strong> Keeps recording status visible with a persistent Stop button.
+              </p>
+            </div>
+
+            <div class="banner warning">
+              <i data-lucide="users" style="width:16px;height:16px;flex-shrink:0;margin-top:1px;"></i>
+              <span><strong>Meeting Etiquette &amp; Consent:</strong> Always obtain appropriate permission from meeting participants before recording calls or conversations. CapturePro never bypasses protected content or app audio restrictions.</span>
+            </div>
+
+            <div class="card">
+              <strong style="font-size:14px;">CapturePro v1.0.0-proto</strong>
+              <p style="font-size:12px;color:var(--text-muted);margin-top:4px;">
+                Phase 1 Interactive Prototype • Record. Capture. Create.
+              </p>
+            </div>
+          </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav" aria-label="Main navigation">
+          <button class="nav-item active" data-nav="screen-dashboard" type="button">
+            <i data-lucide="home" style="width:20px;height:20px;"></i>
+            <span>Home</span>
+          </button>
+          <button class="nav-item" data-nav="screen-library" type="button">
+            <i data-lucide="film" style="width:20px;height:20px;"></i>
+            <span>Library</span>
+          </button>
+          <button class="nav-item" data-nav="screen-storage" type="button">
+            <i data-lucide="hard-drive" style="width:20px;height:20px;"></i>
+            <span>Storage</span>
+          </button>
+          <button class="nav-item" data-nav="screen-settings" type="button">
+            <i data-lucide="settings" style="width:20px;height:20px;"></i>
+            <span>Settings</span>
+          </button>
+        </nav>
+
+        <!-- Draggable Floating Recording Controls -->
+        <div class="floating-overlay" id="floatingOverlay" title="Drag to reposition">
+          <span class="status-dot" style="color:var(--red);"></span>
+          <span class="float-timer" id="floatTimer">00:00</span>
+          <button class="float-btn" id="floatPauseBtn" type="button" title="Pause/Resume">
+            <i data-lucide="pause" style="width:13px;height:13px;"></i>
+          </button>
+          <button class="float-btn" id="floatShotBtn" type="button" title="Take Screenshot">
+            <i data-lucide="camera" style="width:13px;height:13px;"></i>
+          </button>
+          <button class="float-btn stop" id="floatStopBtn" type="button" title="Stop Recording">
+            <i data-lucide="square" style="width:12px;height:12px;"></i>
+          </button>
+        </div>
+
+        <!-- Draggable Facecam Bubble -->
+        <div class="facecam-bubble with-border" id="facecamBubble" title="Drag to reposition facecam">
+          <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.6">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" />
+          </svg>
+          <span class="facecam-tag">CAM SIM</span>
+        </div>
+
+        <!-- Screenshot Flash -->
+        <div class="flash-overlay" id="flashOverlay"></div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast"></div>
+
+        <!-- MODALS -->
+        <!-- 1. MediaProjection Consent Modal -->
+        <div class="modal-backdrop centered" id="modal-consent">
+          <div class="modal-sheet">
+            <div class="modal-title-row">
+              <h3>Start recording with CapturePro?</h3>
+            </div>
+            <p style="font-size:12.5px;color:var(--text-secondary);margin-bottom:12px;">
+              Simulated Android 14+ <strong>MediaProjection</strong> system prompt. Fresh user consent is required for every capture session.
+            </p>
+            <div class="pill-grid" style="margin-bottom:10px;">
+              <button class="select-pill active" id="consentEntireBtn" type="button">
+                <span class="select-pill-title">Entire Screen</span>
+                <span class="select-pill-sub">Capture full display</span>
+              </button>
+              <button class="select-pill" id="consentAppBtn" type="button">
+                <span class="select-pill-title">Single App</span>
+                <span class="select-pill-sub">Privacy-scoped capture</span>
+              </button>
+            </div>
+            <p style="font-size:11px;color:var(--text-muted);">
+              Note: This HTML prototype simulates recording timers and output metadata. Real screen pixels are captured only by the native Android app in Phase 2.
+            </p>
+            <div class="btn-row">
+              <button class="btn btn-secondary" id="consentCancelBtn" type="button">Cancel</button>
+              <button class="btn btn-primary" id="consentStartBtn" type="button">Start Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Recording Completion Modal -->
+        <div class="modal-backdrop" id="modal-completion">
+          <div class="modal-sheet">
+            <div class="modal-title-row">
+              <h3>Recording Saved (Simulated)</h3>
+              <button class="mini-btn" data-close-modal="modal-completion" type="button"><i data-lucide="x" style="width:16px;height:16px;"></i></button>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+              <div class="media-thumb" id="compThumb" style="width:96px;height:64px;"></div>
+              <div>
+                <strong style="font-size:13.5px;display:block;" id="compName">CapturePro_20261123.mp4</strong>
+                <span style="font-size:12px;color:var(--text-muted);" id="compMeta">00:12 • 18.4 MB • 1440p</span>
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="compPlayBtn" type="button"><i data-lucide="play" style="width:15px;height:15px;"></i>Play</button>
+              <button class="btn btn-secondary" id="compRenameBtn" type="button"><i data-lucide="pencil" style="width:14px;height:14px;"></i>Rename</button>
+            </div>
+            <div class="btn-row" style="margin-top:8px;">
+              <button class="btn btn-secondary" id="compShareBtn" type="button"><i data-lucide="share-2" style="width:14px;height:14px;"></i>Share</button>
+              <button class="btn btn-danger" id="compDeleteBtn" type="button"><i data-lucide="trash-2" style="width:14px;height:14px;"></i>Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Built-in Video Player Modal -->
+        <div class="modal-backdrop" id="modal-player">
+          <div class="modal-sheet">
+            <div class="modal-title-row">
+              <h3 id="playerTitle" style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Video Playback</h3>
+              <button class="mini-btn" id="closePlayerBtn" type="button"><i data-lucide="x" style="width:16px;height:16px;"></i></button>
+            </div>
+            <div class="player-stage">
+              <video id="videoPlayerEl" controls playsinline></video>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:11.5px;color:var(--text-muted);" id="playerMeta">1440p • 60 FPS</span>
+              <label class="proto-btn" style="cursor:pointer;">
+                <i data-lucide="upload" style="width:12px;height:12px;"></i>
+                Load Local Video
+                <input type="file" id="localVideoInput" accept="video/*" style="display:none;" />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Screenshot Preview Modal -->
+        <div class="modal-backdrop" id="modal-screenshot">
+          <div class="modal-sheet">
+            <div class="modal-title-row">
+              <h3>Screenshot Captured</h3>
+              <button class="mini-btn" data-close-modal="modal-screenshot" type="button"><i data-lucide="x" style="width:16px;height:16px;"></i></button>
+            </div>
+            <img id="shotPreviewImg" alt="Screenshot preview" style="width:100%;border-radius:12px;border:1px solid var(--border-subtle);margin-bottom:10px;" />
+            <div style="font-size:12.5px;font-weight:600;" id="shotNameLabel">Screenshot.png</div>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="shotShareBtn" type="button"><i data-lucide="share-2" style="width:14px;height:14px;"></i>Share</button>
+              <button class="btn btn-secondary" id="shotRenameBtn" type="button"><i data-lucide="pencil" style="width:14px;height:14px;"></i>Rename</button>
+              <button class="btn btn-danger" id="shotDeleteBtn" type="button"><i data-lucide="trash-2" style="width:14px;height:14px;"></i>Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Rename Modal -->
+        <div class="modal-backdrop centered" id="modal-rename">
+          <div class="modal-sheet">
+            <div class="modal-title-row">
+              <h3>Rename File</h3>
+              <button class="mini-btn" data-close-modal="modal-rename" type="button"><i data-lucide="x" style="width:16px;height:16px;"></i></button>
+            </div>
+            <input type="text" class="text-input" id="renameInput" />
+            <div class="btn-row">
+              <button class="btn btn-secondary" data-close-modal="modal-rename" type="button">Cancel</button>
+              <button class="btn btn-primary" id="confirmRenameBtn" type="button">Save Name</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Delete Confirmation Modal -->
+        <div class="modal-backdrop centered" id="modal-delete">
+          <div class="modal-sheet">
+            <div class="modal-title-row">
+              <h3>Delete File?</h3>
+            </div>
+            <p style="font-size:12.5px;color:var(--text-secondary);" id="deletePromptText">This action cannot be undone.</p>
+            <div class="btn-row">
+              <button class="btn btn-secondary" data-close-modal="modal-delete" type="button">Cancel</button>
+              <button class="btn btn-danger" id="confirmDeleteBtn" type="button">Delete</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Details Modal -->
+        <div class="modal-backdrop centered" id="modal-details">
+          <div class="modal-sheet">
+            <div class="modal-title-row">
+              <h3>File Details</h3>
+              <button class="mini-btn" data-close-modal="modal-details" type="button"><i data-lucide="x" style="width:16px;height:16px;"></i></button>
+            </div>
+            <div id="detailsBody" style="font-size:12.5px;line-height:1.7;color:var(--text-secondary);"></div>
+          </div>
+        </div>
+
+        <!-- 8. Error State Modal -->
+        <div class="modal-backdrop centered" id="modal-error">
+          <div class="modal-sheet">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+              <div class="settings-icon" style="background:var(--red-soft);color:var(--red);">
+                <i data-lucide="alert-octagon" style="width:18px;height:18px;"></i>
+              </div>
+              <h3 id="errorModalTitle" style="font-size:15px;">Error</h3>
+            </div>
+            <p id="errorModalDesc" style="font-size:12.5px;color:var(--text-secondary);line-height:1.5;"></p>
+            <div class="btn-row">
+              <button class="btn btn-secondary" data-close-modal="modal-error" type="button">Dismiss</button>
+              <button class="btn btn-primary" id="errorActionBtn" type="button">Fix Issue</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. Error State Simulator Menu -->
+        <div class="modal-backdrop" id="modal-errors-menu">
+          <div class="modal-sheet">
+            <div class="modal-title-row">
+              <h3>Simulate Android Error States</h3>
+              <button class="mini-btn" data-close-modal="modal-errors-menu" type="button"><i data-lucide="x" style="width:16px;height:16px;"></i></button>
+            </div>
+            <div id="errorSimList" style="display:flex;flex-direction:column;gap:6px;"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
